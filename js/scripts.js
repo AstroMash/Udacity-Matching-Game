@@ -12,6 +12,7 @@ const cardList = [
 const cardPairs = cardList;
 var deck = cardList.concat(cardPairs);
 var openCards = [];
+var clickDisabled = false;
 
 /*
  * Display the cards on the page
@@ -61,8 +62,7 @@ function flipCard(evt) {
     //When the deck is clicked, check if the clicked element was a card
     if(evt.target.nodeName === 'LI') {
         const card = evt.target;
-        //Open the card and check for a match
-        card.classList.add("show", "open");
+        //Check card for a match
         checkMatch(card);
     }
 }
@@ -70,12 +70,22 @@ function flipCard(evt) {
 function checkMatch(card) {
     //Check if there are any open cards
     if(openCards.length != 0) {
+        //Check if clicking is allowed right now
+        if(clickDisabled){
+            return;
+        }
+        //Disable clicking until cards are checked
+        clickDisabled = true;
+        //Show the card's face (moved here from flipCard() so it could be placed after the click disabler)
+        card.classList.add("show", "open");
         //Check if the opened cards match
         if(card.innerHTML == openCards[0].innerHTML){
             //If they match, leave them open and clear the opened cards list
             card.classList.add("match");
             openCards[0].classList.add("match");
             openCards = [];
+            //Allow clicking after the check has completed
+            clickDisabled = false;
         } else {
             //If they don't match, add a class indicating the mismatch to both cards
             card.classList.add("nomatch");
@@ -85,9 +95,14 @@ function checkMatch(card) {
                 card.classList.remove("show", "open", "nomatch");
                 openCards[0].classList.remove("show", "open", "nomatch");
                 openCards = [];
+                //Allow clicking after the check has completed
+                clickDisabled = false;
             }, 1000);
         }
     } else {
+        //No other cards are open so just show the card and add it to the open cards list
+        //Show the card's face
+        card.classList.add("show", "open");
         //If there aren't any opened cards, add current card to the opened cards list
         openCards.push(card);
     }
