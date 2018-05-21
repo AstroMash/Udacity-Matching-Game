@@ -79,7 +79,9 @@ deckContainer.addEventListener("click", flipCard);
 
 //Add click listener to the reset button
 const resetButton = document.querySelector('.reset');
-resetButton.addEventListener("click", function() {
+resetButton.addEventListener("click", resetGame);
+
+function resetGame() {
     clearInterval(timer);
     totalSeconds = 0;
     secondsLabel.innerHTML = pad(totalSeconds % 60);
@@ -93,7 +95,7 @@ resetButton.addEventListener("click", function() {
     timerStarted = false;
     deckContainer.innerHTML = '';
     dealCards();
-})
+}
 
 //Loop through each card in deck and create its HTML
 function dealCards() {
@@ -130,10 +132,18 @@ function shuffle(array) {
 
 function checkWin() {
     if(currentPairs === possiblePairs) {
-        console.log("Win!");
         stopTimer();
-    } else {
-        console.log("No win yet");
+        swal({
+            type: 'success',
+            title: 'Great job!',
+            html: 'You won in ' + moveCount + ' moves!',
+            confirmButtonText: 'Play again!',
+            showCancelButton: true
+        }).then((result) => {
+            if(result.value) {
+                resetGame();
+            }
+        });
     }
 }
 
