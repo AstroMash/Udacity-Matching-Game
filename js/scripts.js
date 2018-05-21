@@ -11,14 +11,20 @@ const cardList = [
 //Create a clone of the card list (for pairing) and push into original array, creating the final deck array
 const cardPairs = cardList;
 var deck = cardList.concat(cardPairs);
+
+//Set up starting variables
 var openCards = [];
 var clickDisabled = false;
 var moveCount = 0;
 var possiblePairs = cardList.length;
 var currentPairs = 0;
+
 var movesLabel = document.getElementById("moves");
 
-//Set up timer
+/*
+ * Game timer logic
+ */
+
 var timer;
 var minutesLabel = document.getElementById("minutes");
 var secondsLabel = document.getElementById("seconds");
@@ -54,6 +60,8 @@ var startTimer = (function() {
 function stopTimer() {
     clearInterval(timer);
 }
+
+
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
