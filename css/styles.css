@@ -68,6 +68,7 @@ body {
 
 .sidebar {
     width: 300px;
+    padding-left: 40px;
     -webkit-order: 0;
     -ms-flex-order: 0;
     order: 0;
@@ -77,6 +78,10 @@ body {
     -webkit-align-self: auto;
     -ms-flex-item-align: auto;
     align-self: auto;
+}
+
+.sidebar span {
+    font-weight: bold;
 }
 
 /*
@@ -126,4 +131,41 @@ body {
 
 .deck .card.nomatch {
     background: #99240f;
+}
+
+/*
+/* Reset button
+*/
+
+.reset {
+    display: block;
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    margin-top: 40px;
+    background: white;
+    border: 1px solid orange;
+    color: orange;
+    border-radius: 5px;
+    box-shadow: 0 3px orange;
+}
+
+.reset i {
+    padding-right: 10px;
+    font-size: 13px;
+}
+
+.reset:hover {
+    top: 1px;
+    box-shadow: 0 2px orange;
+}
+
+.reset:focus {
+    outline: none;
+}
+
+.reset:active {
+    outline: none;
+    top: 2px;
+    box-shadow: 0 1px orange;
 }

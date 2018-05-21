@@ -13,7 +13,47 @@ const cardPairs = cardList;
 var deck = cardList.concat(cardPairs);
 var openCards = [];
 var clickDisabled = false;
+var moveCount = 0;
+var possiblePairs = cardList.length;
+var currentPairs = 0;
+var movesLabel = document.getElementById("moves");
 
+//Set up timer
+var timer;
+var minutesLabel = document.getElementById("minutes");
+var secondsLabel = document.getElementById("seconds");
+var totalSeconds = 0;
+
+
+function setTime() {
+    ++totalSeconds;
+    secondsLabel.innerHTML = pad(totalSeconds % 60);
+    minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+}
+
+function pad(val) {
+    var valString = val + "";
+    if (valString.length < 2) {
+        return "0" + valString;
+    } else {
+        return valString;
+    }
+}
+
+var timerStarted = false;
+var startTimer = (function() {
+    //Setup below is to enable single use only of this function
+    return function() {
+        if(!timerStarted) {
+            timerStarted = true;
+            timer = setInterval(setTime, 1000);
+        }
+    };
+})();
+
+function stopTimer() {
+    clearInterval(timer);
+}
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -24,24 +64,46 @@ var clickDisabled = false;
 //Shuffle the deck
 deck = shuffle(deck);
 
-//Find HTML container for the deck
-const deckContainer = document.querySelector('.deck');
 
 //Add click listener to the deck and flip the card if it's clicked
+const deckContainer = document.querySelector('.deck');
 deckContainer.addEventListener("click", flipCard);
 
+//Add click listener to the reset button
+const resetButton = document.querySelector('.reset');
+resetButton.addEventListener("click", function() {
+    clearInterval(timer);
+    totalSeconds = 0;
+    secondsLabel.innerHTML = pad(totalSeconds % 60);
+    minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+    moveCount = 0;
+    movesLabel.innerHTML = moveCount;
+    currentPairs = 0;
+    openCards = [];
+    deck = shuffle(deck);
+    clickDisabled = false;
+    timerStarted = false;
+    deckContainer.innerHTML = '';
+    dealCards();
+})
+
 //Loop through each card in deck and create its HTML
-for (i = 0; i < deck.length; i++) {
-    //Create blank card
-    const newCard = document.createElement('li');
-    newCard.className = 'card';
-    //Create an icon and add it to the card
-    const newIcon = document.createElement('i');
-    newIcon.classList.add('fas', 'fa-' + deck[i]);
-    newCard.appendChild(newIcon);
-    //Place the card on the page
-    deckContainer.appendChild(newCard);
+function dealCards() {
+    for (i = 0; i < deck.length; i++) {
+        //Create blank card
+        const newCard = document.createElement('li');
+        newCard.className = 'card';
+        //Create an icon and add it to the card
+        const newIcon = document.createElement('i');
+        newIcon.classList.add('fas', 'fa-' + deck[i]);
+        newCard.appendChild(newIcon);
+        //Place the card on the page
+        deckContainer.appendChild(newCard);
+    }
 }
+
+dealCards();
+
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -58,9 +120,19 @@ function shuffle(array) {
     return array;
 }
 
+function checkWin() {
+    if(currentPairs === possiblePairs) {
+        console.log("Win!");
+        stopTimer();
+    } else {
+        console.log("No win yet");
+    }
+}
+
 function flipCard(evt) {
     //When the deck is clicked, check if the clicked element was a card
     if(evt.target.nodeName === 'LI') {
+        startTimer();
         const card = evt.target;
         //Check card for a match
         checkMatch(card);
@@ -74,6 +146,9 @@ function checkMatch(card) {
         if(clickDisabled){
             return;
         }
+        //Increase the move counter since this is the second card of the attempt
+        moveCount++;
+        movesLabel.innerHTML = moveCount;
         //Disable clicking until cards are checked
         clickDisabled = true;
         //Show the card's face (moved here from flipCard() so it could be placed after the click disabler)
@@ -84,6 +159,10 @@ function checkMatch(card) {
             card.classList.add("match");
             openCards[0].classList.add("match");
             openCards = [];
+            //Increase the matched pair counter
+            currentPairs++;
+            //Check for winning status
+            checkWin();
             //Allow clicking after the check has completed
             clickDisabled = false;
         } else {
