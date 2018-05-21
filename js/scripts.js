@@ -16,9 +16,12 @@ var deck = cardList.concat(cardPairs);
 var openCards = [];
 var clickDisabled = false;
 var moveCount = 0;
+var starCount = 3;
+var starWinText = "stars";
 var possiblePairs = cardList.length;
 var currentPairs = 0;
 
+var stars = document.getElementById('rating');
 var movesLabel = document.getElementById("moves");
 
 /*
@@ -94,6 +97,9 @@ function resetGame() {
     clickDisabled = false;
     timerStarted = false;
     deckContainer.innerHTML = '';
+    stars.getElementsByTagName("LI")[2].classList.remove("lost");
+    stars.getElementsByTagName("LI")[1].classList.remove("lost");
+    starCount = 3;
     dealCards();
 }
 
@@ -130,13 +136,25 @@ function shuffle(array) {
     return array;
 }
 
+function checkRating() {
+    
+    if(moveCount === 11){
+        stars.getElementsByTagName("LI")[2].classList.add("lost");
+        starCount = 2;
+    } else if(moveCount === 21) {
+        stars.getElementsByTagName("LI")[1].classList.add("lost");
+        starCount = 1;
+        starWinText = "star";
+    }
+}
+
 function checkWin() {
     if(currentPairs === possiblePairs) {
         stopTimer();
         swal({
             type: 'success',
             title: 'Great job!',
-            html: 'You won in ' + moveCount + ' moves!',
+            html: 'You won in ' + moveCount + ' moves with ' + starCount + ' ' + starWinText + '!',
             confirmButtonText: 'Play again!',
             showCancelButton: true
         }).then((result) => {
@@ -167,6 +185,8 @@ function checkMatch(card) {
         //Increase the move counter since this is the second card of the attempt
         moveCount++;
         movesLabel.innerHTML = moveCount;
+        //Adjust rating if necessary
+        checkRating();
         //Disable clicking until cards are checked
         clickDisabled = true;
         //Show the card's face (moved here from flipCard() so it could be placed after the click disabler)
