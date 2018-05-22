@@ -137,7 +137,7 @@ body {
  * Rating stars
  */
 
-#rating {
+.rating {
     font-size: 24px;
     color: #ff9f4c;
     list-style: none;
@@ -145,11 +145,11 @@ body {
     margin: 0 0 40px 0;
 }
 
-#rating li {
+.rating li {
     display: inline;
 }
 
-#rating li.lost {
+.rating li.lost {
     color: #ccc;
 }
 
