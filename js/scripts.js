@@ -100,6 +100,7 @@ function resetGame() {
     stars.getElementsByTagName("LI")[2].classList.remove("lost");
     stars.getElementsByTagName("LI")[1].classList.remove("lost");
     starCount = 3;
+    starWinText = "stars";
     dealCards();
 }
 
