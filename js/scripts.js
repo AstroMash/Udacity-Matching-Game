@@ -142,8 +142,33 @@ function flipCard(evt) {
     if(evt.target.nodeName === 'LI') {
         startTimer();
         const card = evt.target;
-        //Check card for a match
-        checkMatch(card);
+        //Check if there are any open cards
+        if (openCards.length === 0) {
+            //No other cards are open so just show the card and add it to the open cards list
+            //Show the card's face
+            card.classList.add("show", "open");
+            //If there aren't any opened cards, add current card to the opened cards list
+            openCards.push(card);
+        } else {
+            //Check if clicking is allowed right now
+            if (clickDisabled) {
+                return;
+            }
+            //Increase the move counter since this is the second card of the attempt
+            incrementMoveCounter();
+            //Adjust rating if necessary
+            calculateRating();
+            //Disable clicking until cards are checked
+            clickDisabled = true;
+            //Show the card's face (moved here from flipCard() so it could be placed after the click disabler)
+            card.classList.add("show", "open");
+            //Check if the opened cards match
+            if (checkMatch(card.innerHTML, openCards[0].innerHTML)) {
+                successfulMatch(card, openCards[0]);
+            } else {
+                unsuccessfulMatch(card, openCards[0]);
+            }
+        }
     }
 }
 
@@ -152,47 +177,23 @@ function incrementMoveCounter() {
     movesLabel.innerHTML = moveCount;
 }
 
-function checkMatch(card) {
-    //Check if there are any open cards
-    if(openCards.length != 0) {
-        //Check if clicking is allowed right now
-        if(clickDisabled){
-            return;
-        }
-        //Increase the move counter since this is the second card of the attempt
-        incrementMoveCounter();
-        //Adjust rating if necessary
-        calculateRating();
-        //Disable clicking until cards are checked
-        clickDisabled = true;
-        //Show the card's face (moved here from flipCard() so it could be placed after the click disabler)
-        card.classList.add("show", "open");
-        //Check if the opened cards match
-        if(card.innerHTML == openCards[0].innerHTML){
-            //If they match, leave them open and clear the opened cards list
-            successfulMatch(card, openCards[0]);
-            openCards = [];
-            //Increase the matched pair counter
-            currentPairs++;
-            //Check for winning status
-            checkWin();
-            //Allow clicking after the check has completed
-            clickDisabled = false;
-        } else {
-            unsuccessfulMatch(card, openCards[0]);
-        }
-    } else {
-        //No other cards are open so just show the card and add it to the open cards list
-        //Show the card's face
-        card.classList.add("show", "open");
-        //If there aren't any opened cards, add current card to the opened cards list
-        openCards.push(card);
+function checkMatch(firstCard, secondCard) {
+    if (firstCard == secondCard) {
+        return true;
     }
 }
 
 function successfulMatch(firstCard, secondCard) {
     firstCard.classList.add("match");
     secondCard.classList.add("match");
+    //Clear the open cards list
+    openCards = [];
+    //Increase the matched pair counter
+    currentPairs++;
+    //Allow clicking after the check has completed
+    clickDisabled = false;
+    //Check for winning status
+    checkWin();
 }
 
 function unsuccessfulMatch(firstCard, secondCard) {
@@ -223,6 +224,7 @@ function calculateRating() {
 
 function checkWin() {
     if (currentPairs === possiblePairs) {
+        clickDisabled = true;
         stopTimer();
         swal({
             type: 'success',
@@ -237,15 +239,3 @@ function checkWin() {
         });
     }
 }
-
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + DONE: increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + DONE: if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
