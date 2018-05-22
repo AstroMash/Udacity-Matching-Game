@@ -17,6 +17,10 @@ body {
     padding: 0;
 }
 
+/*
+ * Layout
+ */
+
 .container {
     width: 960px;
     margin: 0 auto;
@@ -68,7 +72,7 @@ body {
 
 .sidebar {
     width: 300px;
-    padding-left: 40px;
+    padding: 0 0 0 40px;
     -webkit-order: 0;
     -ms-flex-order: 0;
     order: 0;
@@ -85,16 +89,16 @@ body {
 }
 
 /*
- * Styles for the deck of cards
+ * Deck
  */
 
 .deck {
     width: 660px;
     min-height: 680px;
-    background: #ffffff;
+    background: #fff;
     padding: 32px;
     border-radius: 10px;
-    box-shadow: 0px 2px 6px 0 rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -107,7 +111,7 @@ body {
     width: 125px;
     background: #6f9dc5;
     font-size: 0;
-    color: #ffffff;
+    color: #fff;
     border-radius: 8px;
     cursor: pointer;
     display: flex;
