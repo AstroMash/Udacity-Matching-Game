@@ -137,35 +137,6 @@ function shuffle(array) {
     return array;
 }
 
-function checkRating() {
-    
-    if(moveCount === 11){
-        stars.getElementsByTagName("LI")[2].classList.add("lost");
-        starCount = 2;
-    } else if(moveCount === 21) {
-        stars.getElementsByTagName("LI")[1].classList.add("lost");
-        starCount = 1;
-        starWinText = "star";
-    }
-}
-
-function checkWin() {
-    if(currentPairs === possiblePairs) {
-        stopTimer();
-        swal({
-            type: 'success',
-            title: 'Great job!',
-            html: 'You won in ' + moveCount + ' moves with ' + starCount + ' ' + starWinText + '!',
-            confirmButtonText: 'Play again!',
-            showCancelButton: true
-        }).then((result) => {
-            if(result.value) {
-                resetGame();
-            }
-        });
-    }
-}
-
 function flipCard(evt) {
     //When the deck is clicked, check if the clicked element was a card
     if(evt.target.nodeName === 'LI') {
@@ -176,6 +147,11 @@ function flipCard(evt) {
     }
 }
 
+function incrementMoveCounter() {
+    moveCount++;
+    movesLabel.innerHTML = moveCount;
+}
+
 function checkMatch(card) {
     //Check if there are any open cards
     if(openCards.length != 0) {
@@ -184,10 +160,9 @@ function checkMatch(card) {
             return;
         }
         //Increase the move counter since this is the second card of the attempt
-        moveCount++;
-        movesLabel.innerHTML = moveCount;
+        incrementMoveCounter();
         //Adjust rating if necessary
-        checkRating();
+        calculateRating();
         //Disable clicking until cards are checked
         clickDisabled = true;
         //Show the card's face (moved here from flipCard() so it could be placed after the click disabler)
@@ -195,8 +170,7 @@ function checkMatch(card) {
         //Check if the opened cards match
         if(card.innerHTML == openCards[0].innerHTML){
             //If they match, leave them open and clear the opened cards list
-            card.classList.add("match");
-            openCards[0].classList.add("match");
+            successfulMatch(card, openCards[0]);
             openCards = [];
             //Increase the matched pair counter
             currentPairs++;
@@ -226,6 +200,40 @@ function checkMatch(card) {
     }
 }
 
+function successfulMatch(firstCard, secondCard) {
+    firstCard.classList.add("match");
+    secondCard.classList.add("match");
+}
+
+function calculateRating() {
+
+    if (moveCount === 11) {
+        stars.getElementsByTagName("LI")[2].classList.add("lost");
+        starCount = 2;
+    } else if (moveCount === 21) {
+        stars.getElementsByTagName("LI")[1].classList.add("lost");
+        starCount = 1;
+        starWinText = "star";
+    }
+}
+
+function checkWin() {
+    if (currentPairs === possiblePairs) {
+        stopTimer();
+        swal({
+            type: 'success',
+            title: 'Great job!',
+            html: 'You won in ' + moveCount + ' moves with ' + starCount + ' ' + starWinText + '!',
+            confirmButtonText: 'Play again!',
+            showCancelButton: true
+        }).then((result) => {
+            if (result.value) {
+                resetGame();
+            }
+        });
+    }
+}
+
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -234,6 +242,6 @@ function checkMatch(card) {
  *  - if the list already has another card, check to see if the two cards match
  *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
  *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+ *    + DONE: increment the move counter and display it on the page (put this functionality in another function that you call from this one)
+ *    + DONE: if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
