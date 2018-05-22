@@ -179,17 +179,7 @@ function checkMatch(card) {
             //Allow clicking after the check has completed
             clickDisabled = false;
         } else {
-            //If they don't match, add a class indicating the mismatch to both cards
-            card.classList.add("nomatch");
-            openCards[0].classList.add("nomatch");
-            //Wait 1 second, the reset the open cards and clear the opened cards list
-            setTimeout(function () {
-                card.classList.remove("show", "open", "nomatch");
-                openCards[0].classList.remove("show", "open", "nomatch");
-                openCards = [];
-                //Allow clicking after the check has completed
-                clickDisabled = false;
-            }, 1000);
+            unsuccessfulMatch(card, openCards[0]);
         }
     } else {
         //No other cards are open so just show the card and add it to the open cards list
@@ -203,6 +193,20 @@ function checkMatch(card) {
 function successfulMatch(firstCard, secondCard) {
     firstCard.classList.add("match");
     secondCard.classList.add("match");
+}
+
+function unsuccessfulMatch(firstCard, secondCard) {
+    //If they don't match, add a class indicating the mismatch to both cards
+    firstCard.classList.add("nomatch");
+    secondCard.classList.add("nomatch");
+    //Wait 1 second, the reset the open cards and clear the opened cards list
+    setTimeout(function () {
+        firstCard.classList.remove("show", "open", "nomatch");
+        secondCard.classList.remove("show", "open", "nomatch");
+        openCards = [];
+        //Allow clicking after the check has completed
+        clickDisabled = false;
+    }, 1000);
 }
 
 function calculateRating() {
