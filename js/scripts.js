@@ -156,7 +156,7 @@ function flipCard(evt) {
             calculateRating();
             //Disable clicking until cards are checked
             clickDisabled = true;
-            //Show the card's face (moved here from flipCard() so it could be placed after the click disabler)
+            //Show the card's face so it could be placed after the click disabler)
             card.classList.add('show', 'open');
             //Check if the opened cards match
             if (checkMatch(card.innerHTML, openCards[0].innerHTML)) {
