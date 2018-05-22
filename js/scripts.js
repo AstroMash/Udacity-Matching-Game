@@ -146,6 +146,10 @@ function flipCard(evt) {
             if (clickDisabled) {
                 return;
             }
+            //Check if clicking the same card again
+            if (card === openCards[0]) {
+                return;
+            }
             //Increase the move counter since this is the second card of the attempt
             incrementMoveCounter();
             //Adjust rating if necessary
