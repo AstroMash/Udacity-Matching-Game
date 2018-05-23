@@ -1,6 +1,6 @@
-# Udacity Project : Memory Game
+# Memory Game
 
-* Created for the Front-End Web Developer Nanodegree Program
+* Created for the Udacity Front-End Web Developer Nanodegree Program
 * Uses a portion of the [starter code](https://github.com/udacity/fend-project-memory-game) provided by Udacity
 
 ## How to Play
