@@ -78,9 +78,9 @@ function setTime() {
 
 //Timer helper function
 function pad(val) {
-    var valString = val + '';
+    var valString = val.toString();
     if (valString.length < 2) {
-        return '0' + valString;
+        return `0${valString}`;
     } else {
         return valString;
     }
@@ -106,7 +106,7 @@ function dealCards() {
         newCard.className = 'card';
         //Create an icon and add it to the card
         const newIcon = document.createElement('i');
-        newIcon.classList.add('fas', 'fa-' + deck[i]);
+        newIcon.classList.add('fas', `fa-${deck[i]}`);
         newCard.appendChild(newIcon);
         //Place the card on the page
         deckContainer.appendChild(newCard);
@@ -235,7 +235,7 @@ function checkWin() {
         swal({
             type: 'success',
             title: 'Great job!',
-            html: 'You won in ' + moveCount + ' moves with ' + starCount + ' ' + starWinText + '!',
+            html: `You won in ${moveCount} moves with ${starCount} ${starWinText}!`,
             confirmButtonText: 'Play again!',
             showCancelButton: true
         }).then((result) => {
@@ -263,8 +263,8 @@ $.fn.extend({
       }
     })(document.createElement('div'));
 
-    this.addClass('animated ' + animationName).one(animationEnd, function() {
-      $(this).removeClass('animated ' + animationName);
+    this.addClass(`animated ${animationName}`).one(animationEnd, function() {
+      $(this).removeClass(`animated ${animationName}`);
 
       if (typeof callback === 'function') callback();
     });
