@@ -180,30 +180,38 @@ function checkMatch(firstCard, secondCard) {
 }
 
 function successfulMatch(firstCard, secondCard) {
+    //Change background to signify match
     firstCard.classList.add('match');
     secondCard.classList.add('match');
-    //Clear the open cards list
-    openCards = [];
-    //Increase the matched pair counter
-    currentPairs++;
-    //Allow clicking after the check has completed
-    clickDisabled = false;
-    //Check for winning status
-    checkWin();
+    //Animate cards
+    $(firstCard).animateCss('pulse');
+    $(secondCard).animateCss('pulse', function() {
+        //Clear the open cards list
+        openCards = [];
+        //Increase the matched pair counter
+        currentPairs++;
+        //Allow clicking after the check has completed
+        clickDisabled = false;
+        //Check for winning status
+        checkWin();
+    });
 }
 
 function unsuccessfulMatch(firstCard, secondCard) {
     //If they don't match, add a class indicating the mismatch to both cards
     firstCard.classList.add('nomatch');
     secondCard.classList.add('nomatch');
-    //Wait 1 second, the reset the open cards and clear the opened cards list
-    setTimeout(function () {
+    //Animate cards
+    $(firstCard).animateCss('wobble', function() {
         firstCard.classList.remove('show', 'open', 'nomatch');
+    });
+    $(secondCard).animateCss('wobble', function() {
         secondCard.classList.remove('show', 'open', 'nomatch');
+        //Clear the open cards list
         openCards = [];
-        //Allow clicking after the check has completed
+        //Allow clicking after the animation has completed
         clickDisabled = false;
-    }, 1000);
+    });
 }
 
 function calculateRating() {
@@ -235,3 +243,30 @@ function checkWin() {
         });
     }
 }
+
+$.fn.extend({
+  animateCss: function(animationName, callback) {
+    var animationEnd = (function(el) {
+      var animations = {
+        animation: 'animationend',
+        OAnimation: 'oAnimationEnd',
+        MozAnimation: 'mozAnimationEnd',
+        WebkitAnimation: 'webkitAnimationEnd',
+      };
+
+      for (var t in animations) {
+        if (el.style[t] !== undefined) {
+          return animations[t];
+        }
+      }
+    })(document.createElement('div'));
+
+    this.addClass('animated ' + animationName).one(animationEnd, function() {
+      $(this).removeClass('animated ' + animationName);
+
+      if (typeof callback === 'function') callback();
+    });
+
+    return this;
+  },
+});
