@@ -52,7 +52,9 @@ function initializeValues() {
 
 initializeValues();
 
-var setupDeck = (function () {
+let setupDeck;
+
+(setupDeck = () => {
     //Create a clone of the card list (for pairing) and push into original array, creating the final deck array
     const cardPairs = cardList;
     deck = shuffle(cardList.concat(cardPairs));
