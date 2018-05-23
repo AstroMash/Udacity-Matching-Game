@@ -25,3 +25,9 @@ Click a card to reveal its symbol. Try to match pairs by revealing two cards at 
 
 ### Icons:
 * [Font Awesome](https://fontawesome.com/)
+
+### Animations:
+* [animate.css](https://github.com/daneden/animate.css/)
+
+### jQuery:
+* [jQuery v3.3.1](https://code.jquery.com/jquery/)
