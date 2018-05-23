@@ -1,4 +1,5 @@
-var deck,
+let deck,
+    setupDeck,
     cardList,
     openCards,
     clickDisabled,
@@ -13,7 +14,8 @@ var deck,
     timerStarted,
     starWinText,
     possiblePairs,
-    currentPairs;
+    currentPairs,
+    initializeValues;
 
 //Add click listener to the deck and flip the card if it's clicked
 const deckContainer = document.querySelector('.deck');
@@ -23,7 +25,7 @@ deckContainer.addEventListener('click', flipCard);
 const resetButton = document.querySelector('.reset');
 resetButton.addEventListener('click', resetGame);
 
-function initializeValues() {
+(initializeValues = () => {
     //Set up starting variables
     openCards = [];
     clickDisabled = false;
@@ -48,11 +50,7 @@ function initializeValues() {
     movesLabel.innerHTML = moveCount;
     secondsLabel.innerHTML = pad(totalSeconds % 60);
     minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
-};
-
-initializeValues();
-
-let setupDeck;
+})();
 
 (setupDeck = () => {
     //Create a clone of the card list (for pairing) and push into original array, creating the final deck array
